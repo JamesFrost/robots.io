@@ -13,7 +13,12 @@ To parse the robots.txt for Google with the User-Agent string "test":
 RobotsParser robotsParser = new RobotsParser("test");
 robotsParser.connect("http://google.com");
 ```
-Alternatively, to parse with no User-Agent, simply leave the constructor blank.
+Alternatively, to parse with no User-Agent, simply leave the constructor blank.<br>
+
+You can also pass a domain with a path.
+```java
+robotsParser.connect("http://google.com/example.htm"); //This would also be valid
+```
 
 ### Querying
 To check if a URL is allowed:
