@@ -33,7 +33,7 @@ In the event that all access is denied, a ```RobotsDisallowedException``` will b
 
 ## URL Normalisation
 Domains passed to RobotsParser are normalised to always end in a forward slash.
-Disallowed Paths returned will never end with a forward slash.
+Disallowed Paths returned will never begin with a forward slash.
 This is so that URL's can easily be constructed. For example:
 ```java
 robotsParser.getDomain() + robotsParser.getDisallowedPaths().get(0); // http://google.com/example.htm
