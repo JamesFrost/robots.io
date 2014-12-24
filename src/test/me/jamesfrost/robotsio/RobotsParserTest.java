@@ -2,7 +2,6 @@ package test.me.jamesfrost.robotsio;
 
 import me.jamesfrost.robotsio.RobotsDisallowedException;
 import me.jamesfrost.robotsio.RobotsParser;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,10 +27,6 @@ public class RobotsParserTest {
         disallowedPaths.add("cgi-bin/");
         disallowedPaths.add("404.htm");
         disallowedPaths.add("CV.htm");
-    }
-
-    @After
-    public void after() throws Exception {
     }
 
     /**

@@ -93,5 +93,4 @@ class RobotsTxtReader {
         }
         return disallowedPaths;
     }
-
 }

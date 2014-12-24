@@ -8,14 +8,19 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Gets and processes a websites robots.txt.
+ * Gets and processes a websites robots.txt. Provides all functionality to use robots.io.
+ * <p/>
+ * Data parsed from the file is cached until 'connect()' is called, when it is overwritten.
  * <p/>
  * Created by James Frost on 22/12/2014.
  */
 public class RobotsParser {
 
+    //List of disallowed paths parsed from last website
     private ArrayList<String> disallowedPaths;
+    //Last domain scraped
     private String domain;
+    //UserAgent string to parse with
     private String userAgent;
 
     /**
@@ -28,14 +33,14 @@ public class RobotsParser {
     /**
      * Creates a new RobotsParser.
      *
-     * @param userAgent UserAgent to parse for
+     * @param userAgent UserAgent to parse with
      */
     public RobotsParser(String userAgent) {
         this.userAgent = userAgent;
     }
 
     /**
-     * Checks if a URL is allowed in a sites robots.txt.
+     * Checks if a URL is allowed in a sites robots.txt. Checks against the current rules in disallowedPaths.
      *
      * @param url URL to check
      * @return True if allowed
@@ -50,7 +55,7 @@ public class RobotsParser {
     }
 
     /**
-     * Checks if a URL is allowed in a sites robots.txt.
+     * Checks if a URL is allowed in a sites robots.txt. Checks against the current rules in disallowedPaths.
      *
      * @param url URL to check
      * @return True if allowed
@@ -98,7 +103,7 @@ public class RobotsParser {
     }
 
     /**
-     * Processes a websites robots.txt.
+     * Processes a websites robots.txt, and overwrites the disallowedPaths and domain.
      *
      * @param robotsTxtUrl Websites robots.txt to process
      * @throws RobotsDisallowedException
@@ -123,7 +128,7 @@ public class RobotsParser {
     }
 
     /**
-     * Processes a websites robots.txt.
+     * Processes a websites robots.txt, and overwrites the disallowedPaths and domain.
      *
      * @param url Websites robots.txt to process
      * @throws me.jamesfrost.robotsio.RobotsDisallowedException
@@ -132,15 +137,30 @@ public class RobotsParser {
         connect(new URL(url));
     }
 
-    public boolean isEmpty() {
-        return disallowedPaths.isEmpty();
-    }
-
+    /**
+     * Gets the disallowed paths currently cached.
+     *
+     * @return disallowedPaths
+     */
     public ArrayList<String> getDisallowedPaths() {
         return disallowedPaths;
     }
 
+    /**
+     * Gets the domain that corresponds to the rules currently cached.
+     *
+     * @return domain
+     */
     public String getDomain() {
         return domain;
+    }
+
+    /**
+     * Gets the User-Agent string being used to parse.
+     *
+     * @return userAgent
+     */
+    public String getUserAgent() {
+        return userAgent;
     }
 }
