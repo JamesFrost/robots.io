@@ -38,3 +38,6 @@ This is so that URL's can easily be constructed. For example:
 ```java
 robotsParser.getDomain() + robotsParser.getDisallowedPaths().get(0); // http://google.com/example.htm
 ```
+
+## Licensing
+Robots.io is distributed under the GPL.
