@@ -19,6 +19,7 @@ You can also pass a domain with a path.
 ```java
 robotsParser.connect("http://google.com/example.htm"); //This would also be valid
 ```
+Note: Domains can either be passed in string form or as a <a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html">URL</a> object to all methods.
 
 ### Querying
 To check if a URL is allowed:
