@@ -40,13 +40,17 @@ public class RobotsParser {
     }
 
     /**
-     * Checks if a URL is allowed in a sites robots.txt. Checks against the current rules in disallowedPaths.
+     * Checks if a URL is allowed in a sites robots.txt.
+     * <p/>
+     * Searches against the current rules in disallowedPaths to see
+     * if the path in the URL is disallowed.
+     * <p/>
      *
      * @param url URL to check
      * @return True if allowed
      */
     public boolean isAllowed(URL url) {
-        String urlString = url.toString();
+        String urlString = url.getPath();
         for (String disallowedPath : disallowedPaths) {
             if (urlString.contains(disallowedPath))
                 return false;
