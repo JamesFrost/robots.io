@@ -12,6 +12,9 @@ import java.util.ArrayList;
  * <p/>
  * Data parsed from the file is cached until 'connect()' is called, when it is overwritten.
  * <p/>
+ * If not robots.txt file is found, disallowedPaths will be empty. Similarly, if all access is deaned and a
+ * RobotsDisallowedException is thrown, disallowedPaths is cleared.
+ * <p/>
  * Created by James Frost on 22/12/2014.
  */
 public class RobotsParser {
@@ -37,6 +40,7 @@ public class RobotsParser {
      */
     public RobotsParser(String userAgent) {
         this.userAgent = userAgent;
+        disallowedPaths = new ArrayList<String>();
     }
 
     /**
@@ -67,6 +71,7 @@ public class RobotsParser {
      *
      * @param url URL to check if allowed
      * @return True if URL is allowed
+     * @throws java.net.MalformedURLException URL passed is not valid
      */
     public boolean isAllowed(String url) throws MalformedURLException {
         return isAllowed(new URL(url));
@@ -81,25 +86,20 @@ public class RobotsParser {
      *
      * @param url Website to construct the robots.txt URL for
      * @return Robots.txt URL for the website passed
+     * @throws java.net.MalformedURLException URL passed is not valid
      */
-    private URL constructRobotsUrl(String url) {
-        URL robotsTxtUrl = null;
-        try {
-            robotsTxtUrl = new URL(url);
+    private URL constructRobotsUrl(String url) throws MalformedURLException {
+        URL robotsTxtUrl = new URL(url);
 
-            if (!robotsTxtUrl.getFile().equals("/") && !robotsTxtUrl.getFile().equals("")) {
-                domain = url.replace(robotsTxtUrl.getFile(), "/");
-                robotsTxtUrl = new URL(url.replace(robotsTxtUrl.getFile(), "/robots.txt"));
-            } else if (robotsTxtUrl.getFile().equals("")) {
-                robotsTxtUrl = new URL(url + "/robots.txt");
-                domain = url + "/";
-            } else {
-                domain = url;
-                robotsTxtUrl = new URL(url + "robots.txt");
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (!robotsTxtUrl.getFile().equals("/") && !robotsTxtUrl.getFile().equals("")) {
+            domain = url.replace(robotsTxtUrl.getFile(), "/");
+            robotsTxtUrl = new URL(url.replace(robotsTxtUrl.getFile(), "/robots.txt"));
+        } else if (robotsTxtUrl.getFile().equals("")) {
+            robotsTxtUrl = new URL(url + "/robots.txt");
+            domain = url + "/";
+        } else {
+            domain = url;
+            robotsTxtUrl = new URL(url + "robots.txt");
         }
         return robotsTxtUrl;
     }
@@ -109,8 +109,9 @@ public class RobotsParser {
      *
      * @param url Website to construct the URL for
      * @return Robots.txt URL for the websites robots.txt
+     * @throws java.net.MalformedURLException URL passed is not valid
      */
-    private URL constructRobotsUrl(URL url) {
+    private URL constructRobotsUrl(URL url) throws MalformedURLException {
         return constructRobotsUrl(url.toString());
     }
 
@@ -123,9 +124,10 @@ public class RobotsParser {
      * <p/>
      *
      * @param url Website to parse the robots.txt for
-     * @throws RobotsDisallowedException Access disallowed
+     * @throws RobotsDisallowedException      Access disallowed
+     * @throws java.net.MalformedURLException URL passed is not valid
      */
-    public void connect(URL url) throws RobotsDisallowedException {
+    public void connect(URL url) throws RobotsDisallowedException, MalformedURLException {
         url = constructRobotsUrl(url);
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -138,8 +140,9 @@ public class RobotsParser {
                 disallowedPaths = robotsTxtReader.read(in);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            disallowedPaths.clear();
         } catch (RobotsDisallowedException e) {
+            disallowedPaths.clear();
             throw new RobotsDisallowedException(domain);
         }
     }
@@ -154,6 +157,7 @@ public class RobotsParser {
      *
      * @param url Website to parse the robots.txt for
      * @throws me.jamesfrost.robotsio.RobotsDisallowedException Access disallowed
+     * @throws java.net.MalformedURLException                   URL passed is not valid
      */
     public void connect(String url) throws RobotsDisallowedException, MalformedURLException {
         connect(new URL(url));

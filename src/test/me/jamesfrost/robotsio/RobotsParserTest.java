@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
  */
 public class RobotsParserTest {
 
+    //Disallowed paths on jamesfrost.me
     private ArrayList<String> disallowedPaths;
 
     @Before
@@ -65,6 +66,9 @@ public class RobotsParserTest {
 
         robotsParser.connect(new URL("http://jamesfrost.me/about.htm"));
         assertArrayEquals(disallowedPaths.toArray(), robotsParser.getDisallowedPaths().toArray());
+
+        robotsParser.connect("http://youtube.com/robots.txt");
+        assertTrue(robotsParser.getDisallowedPaths().isEmpty());
 
         try {
             robotsParser = new RobotsParser("shitbot");
