@@ -11,12 +11,16 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 /**
-* RobotsParser Tester.
-*
-* @author <James Frost>
-* @version 1.0
-* @since <pre>Dec 24, 2014</pre>
-*/
+ * RobotsParser Tester.
+ * <p/>
+ * Currently, this is testing against the robots.txt file hosted at jamesfrost.me.
+ * This could be improved by creating mock classes.
+ * <p/>
+ *
+ * @author <James Frost>
+ * @version 1.0
+ * @since <pre>Dec 24, 2014</pre>
+ */
 public class RobotsParserTest {
 
     private ArrayList<String> disallowedPaths;

@@ -31,7 +31,7 @@ public class RobotsParser {
     }
 
     /**
-     * Creates a new RobotsParser.
+     * Creates a new RobotsParser to parse with a User-agent string.
      *
      * @param userAgent UserAgent to parse with
      */
@@ -46,8 +46,8 @@ public class RobotsParser {
      * if the path in the URL is disallowed.
      * <p/>
      *
-     * @param url URL to check
-     * @return True if allowed
+     * @param url URL to check if allowed
+     * @return True if URL is allowed
      */
     public boolean isAllowed(URL url) {
         String urlString = url.getPath();
@@ -59,10 +59,14 @@ public class RobotsParser {
     }
 
     /**
-     * Checks if a URL is allowed in a sites robots.txt. Checks against the current rules in disallowedPaths.
+     * Checks if a URL is allowed in a sites robots.txt.
+     * <p/>
+     * Searches against the current rules in disallowedPaths to see
+     * if the path in the URL is disallowed.
+     * <p/>
      *
-     * @param url URL to check
-     * @return True if allowed
+     * @param url URL to check if allowed
+     * @return True if URL is allowed
      */
     public boolean isAllowed(String url) throws MalformedURLException {
         return isAllowed(new URL(url));
@@ -70,9 +74,13 @@ public class RobotsParser {
 
     /**
      * Constructs a URL to the expected location of a websites robots.txt.
+     * <p/>
+     * For example: when passed "http://jamesfrost.me" it will construct "http://jamesfrost.me/robots.txt."
+     * It can also handle URL's with a path.
+     * <p/>
      *
-     * @param url Website to construct the URL for
-     * @return Robots.txt URL
+     * @param url Website to construct the robots.txt URL for
+     * @return Robots.txt URL for the website passed
      */
     private URL constructRobotsUrl(String url) {
         URL robotsTxtUrl = null;
@@ -100,22 +108,27 @@ public class RobotsParser {
      * Constructs a URL to the expected location of a websites robots.txt.
      *
      * @param url Website to construct the URL for
-     * @return Robots.txt URL
+     * @return Robots.txt URL for the websites robots.txt
      */
     private URL constructRobotsUrl(URL url) {
         return constructRobotsUrl(url.toString());
     }
 
     /**
-     * Processes a websites robots.txt, and overwrites the disallowedPaths and domain.
+     * Connects and caches a websites robots.txt.
+     * <p/>
+     * This method overwrites the currently cached disallowedPaths and domain variables.
+     * <p/>
+     * The URL passed can contain a path; for example, jamesfrost.me/about.htm.
+     * <p/>
      *
-     * @param robotsTxtUrl Websites robots.txt to process
-     * @throws RobotsDisallowedException
+     * @param url Website to parse the robots.txt for
+     * @throws RobotsDisallowedException Access disallowed
      */
-    public void connect(URL robotsTxtUrl) throws RobotsDisallowedException {
-        robotsTxtUrl = constructRobotsUrl(robotsTxtUrl);
+    public void connect(URL url) throws RobotsDisallowedException {
+        url = constructRobotsUrl(url);
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(robotsTxtUrl.openStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
             RobotsTxtReader robotsTxtReader = new RobotsTxtReader();
 
@@ -132,10 +145,15 @@ public class RobotsParser {
     }
 
     /**
-     * Processes a websites robots.txt, and overwrites the disallowedPaths and domain.
+     * Connects and caches a websites robots.txt.
+     * <p/>
+     * This method overwrites the currently cached disallowedPaths and domain variables.
+     * <p/>
+     * The URL passed can contain a path; for example, jamesfrost.me/about.htm.
+     * <p/>
      *
-     * @param url Websites robots.txt to process
-     * @throws me.jamesfrost.robotsio.RobotsDisallowedException
+     * @param url Website to parse the robots.txt for
+     * @throws me.jamesfrost.robotsio.RobotsDisallowedException Access disallowed
      */
     public void connect(String url) throws RobotsDisallowedException, MalformedURLException {
         connect(new URL(url));
@@ -143,17 +161,24 @@ public class RobotsParser {
 
     /**
      * Gets the disallowed paths currently cached.
+     * <p/>
+     * These will be normalised so that they never begin with a forward slash. Directories will end with a forward slash,
+     * files will not. This is to allow for easy URL building.
+     * <p/>
      *
-     * @return disallowedPaths
+     * @return The disallowed paths currently cached
      */
     public ArrayList<String> getDisallowedPaths() {
         return disallowedPaths;
     }
 
     /**
-     * Gets the domain that corresponds to the rules currently cached.
+     * Gets the domain that is currently cached.
+     * <p/>
+     * This domain corresponds to the domain for the rules currently cached.
+     * <p/>
      *
-     * @return domain
+     * @return The domain currently cached
      */
     public String getDomain() {
         return domain;
@@ -162,7 +187,7 @@ public class RobotsParser {
     /**
      * Gets the User-Agent string being used to parse.
      *
-     * @return userAgent
+     * @return The User-agent string being used to parse
      */
     public String getUserAgent() {
         return userAgent;

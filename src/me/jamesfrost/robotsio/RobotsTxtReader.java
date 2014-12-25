@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Reads a websites robots.txt.
+ * Contains functionality to parse a robots.txt file.
  * <p/>
  * Created by James Frost on 24/12/2014.
  */
@@ -13,9 +13,13 @@ class RobotsTxtReader {
 
     /**
      * Extracts disallowed paths from a robots.txt.
+     * <p/>
+     * These will be normalised so that they never begin with a forward slash. Directories will end with a forward slash,
+     * files will not. This is to allow for easy URL building.
+     * <p/>
      *
      * @param robotsTxt Robots.txt file to read
-     * @return Disallowed paths
+     * @return Disallowed paths parsed from file
      * @throws RobotsDisallowedException
      */
     protected ArrayList<String> read(BufferedReader robotsTxt) throws RobotsDisallowedException {
@@ -53,11 +57,15 @@ class RobotsTxtReader {
     }
 
     /**
-     * Extracts disallowed paths from a robots.txt.
+     * Extracts disallowed paths from a robots.txt with regard to a User-agent string.
+     * <p/>
+     * These will be normalised so that they never begin with a forward slash. Directories will end with a forward slash,
+     * files will not. This is to allow for easy URL building.
+     * <p/>
      *
      * @param robotsTxt Robots.txt file to read
-     * @param userAgent UserAgent
-     * @return Disallowed paths
+     * @param userAgent UserAgent string to parse with
+     * @return Disallowed paths parsed from file
      * @throws RobotsDisallowedException
      */
     protected ArrayList<String> read(BufferedReader robotsTxt, String userAgent) throws RobotsDisallowedException {
