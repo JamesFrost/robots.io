@@ -20,38 +20,37 @@ class RobotsTxtReader {
      *
      * @param robotsTxt Robots.txt file to read
      * @return Disallowed paths parsed from file
-     * @throws RobotsDisallowedException
+     * @throws RobotsDisallowedException Access disallowed
+     * @throws java.io.IOException       404 - File not found
      */
-    protected ArrayList<String> read(BufferedReader robotsTxt) throws RobotsDisallowedException {
+    protected static ArrayList<String> read(BufferedReader robotsTxt) throws RobotsDisallowedException, IOException {
         Boolean userAgentFound = false;
         String line;
         ArrayList<String> disallowedPaths = new ArrayList<String>();
 
-        try {
-            while ((line = robotsTxt.readLine()) != null) {
-                if (line.contains("User-agent: *")) {
-                    userAgentFound = true;
-                } else if (line.contains("User-agent:")) {
-                    userAgentFound = false;
-                }
-
-                if (userAgentFound && line.contains("Disallow:") && !line.contains("#")) {
-                    line = line.replace("Disallow:", "").trim();
-                    if (line.isEmpty()) //Allowed complete access
-                        return new ArrayList<String>();
-
-                    if (line.equals("/")) { //No access allowed
-                        throw new RobotsDisallowedException();
-                    }
-
-                    if (line.substring(0, 1).equals("/"))
-                        line = line.substring(1);
-
-                    disallowedPaths.add(line);
-                }
+        while ((line = robotsTxt.readLine()) != null) {
+            if (line.contains("User-agent: *")) {
+                userAgentFound = true;
+                continue;
+            } else if (line.contains("User-agent:")) {
+                userAgentFound = false;
+                continue;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            if (userAgentFound && line.contains("Disallow:") && !line.contains("#")) {
+                line = line.replace("Disallow:", "").trim();
+                if (line.isEmpty()) //Allowed complete access
+                    return new ArrayList<String>();
+
+                if (line.equals("/")) { //No access allowed
+                    throw new RobotsDisallowedException();
+                }
+
+                if (line.substring(0, 1).equals("/"))
+                    line = line.substring(1);
+
+                disallowedPaths.add(line);
+            }
         }
         return disallowedPaths;
     }
@@ -66,38 +65,37 @@ class RobotsTxtReader {
      * @param robotsTxt Robots.txt file to read
      * @param userAgent UserAgent string to parse with
      * @return Disallowed paths parsed from file
-     * @throws RobotsDisallowedException
+     * @throws RobotsDisallowedException Access disallowed
+     * @throws java.io.IOException       404 - File not found
      */
-    protected ArrayList<String> read(BufferedReader robotsTxt, String userAgent) throws RobotsDisallowedException {
+    protected static ArrayList<String> read(BufferedReader robotsTxt, String userAgent) throws RobotsDisallowedException, IOException {
         Boolean userAgentFound = false;
         String line;
         ArrayList<String> disallowedPaths = new ArrayList<String>();
 
-        try {
-            while ((line = robotsTxt.readLine()) != null) {
-                if (line.contains("User-agent: *") || line.contains("User-agent: " + userAgent)) {
-                    userAgentFound = true;
-                } else if (line.contains("User-agent:")) {
-                    userAgentFound = false;
-                }
-
-                if (userAgentFound && line.contains("Disallow:") && !line.contains("#")) {
-                    line = line.replace("Disallow:", "").trim();
-                    if (line.isEmpty()) //Allowed complete access
-                        return new ArrayList<String>();
-
-                    if (line.equals("/")) { //No access allowed
-                        throw new RobotsDisallowedException();
-                    }
-
-                    if (line.substring(0, 1).equals("/"))
-                        line = line.substring(1);
-
-                    disallowedPaths.add(line);
-                }
+        while ((line = robotsTxt.readLine()) != null) {
+            if (line.contains("User-agent: *") || line.contains("User-agent: " + userAgent)) {
+                userAgentFound = true;
+                continue;
+            } else if (line.contains("User-agent:")) {
+                userAgentFound = false;
+                continue;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            if (userAgentFound && line.contains("Disallow:") && !line.contains("#")) {
+                line = line.replace("Disallow:", "").trim();
+                if (line.isEmpty()) //Allowed complete access
+                    return new ArrayList<String>();
+
+                if (line.equals("/")) { //No access allowed
+                    throw new RobotsDisallowedException();
+                }
+
+                if (line.substring(0, 1).equals("/"))
+                    line = line.substring(1);
+
+                disallowedPaths.add(line);
+            }
         }
         return disallowedPaths;
     }

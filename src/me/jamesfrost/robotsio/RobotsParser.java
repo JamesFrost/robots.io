@@ -12,10 +12,14 @@ import java.util.ArrayList;
  * <p/>
  * Data parsed from the file is cached until 'connect()' is called, when it is overwritten.
  * <p/>
- * If not robots.txt file is found, disallowedPaths will be empty. Similarly, if all access is deaned and a
- * RobotsDisallowedException is thrown, disallowedPaths is cleared.
+ * If no robots.txt file is found, disallowedPaths will be empty. Similarly, if a file is found but no areas are
+ * disallowed, then the disallowedPaths will be empty.
+ * <p/>
+ * If all access is denied a RobotsDisallowedException is thrown, and disallowedPaths is cleared.
  * <p/>
  * Created by James Frost on 22/12/2014.
+ *
+ * @version v1.0.1
  */
 public class RobotsParser {
 
@@ -132,14 +136,12 @@ public class RobotsParser {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
-            RobotsTxtReader robotsTxtReader = new RobotsTxtReader();
-
             if (userAgent != null)
-                disallowedPaths = robotsTxtReader.read(in, userAgent);
+                disallowedPaths = new RobotsTxtReader().read(in, userAgent);
             else
-                disallowedPaths = robotsTxtReader.read(in);
+                disallowedPaths = new RobotsTxtReader().read(in);
 
-        } catch (IOException e) {
+        } catch (IOException e) { //Page 404 - robots.txt not found/doesn't exist
             disallowedPaths.clear();
         } catch (RobotsDisallowedException e) {
             disallowedPaths.clear();
