@@ -5,6 +5,7 @@ import me.jamesfrost.robotsio.RobotsParser;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -67,15 +68,15 @@ public class RobotsParserTest {
         robotsParser.connect(new URL("http://jamesfrost.me/about.htm"));
         assertArrayEquals(disallowedPaths.toArray(), robotsParser.getDisallowedPaths().toArray());
 
-        robotsParser.connect("http://youtube.com/robots.txt");
+        robotsParser.connect("http://youtube.com/"); //Youtube does not have a robots.txt
         assertTrue(robotsParser.getDisallowedPaths().isEmpty());
 
         try {
-            robotsParser = new RobotsParser("shitbot");
+            robotsParser = new RobotsParser("shitbot"); //The 'shitbot' user-agent is disallowed in the robots.txt on jamesfrost.me
             robotsParser.connect("http://jamesfrost.me");
             fail();
         } catch (RobotsDisallowedException e) {
-            //
+            assertTrue(robotsParser.getDisallowedPaths().isEmpty());
         }
     }
 
@@ -84,24 +85,47 @@ public class RobotsParserTest {
      */
     @Test
     public void testConstructRobotsUrl() throws Exception {
+        try {
+            RobotsParser robotsParser = new RobotsParser();
+
+            robotsParser.connect("http://jamesfrost.me/about.htm");
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect(new URL("http://jamesfrost.me/about.htm"));
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect("http://jamesfrost.me");
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect(new URL("http://jamesfrost.me"));
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect("http://jamesfrost.me/");
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect(new URL("http://jamesfrost.me/"));
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect("http://jamesfrost.me/about.htm/");
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+
+            robotsParser.connect(new URL("http://jamesfrost.me/about.htm/"));
+            assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+        } catch (MalformedURLException e) {
+            fail();
+        }
+    }
+
+    /**
+     * Method: getUserAgent()
+     */
+    @Test
+    public void testGetUserAgent() throws Exception {
+        //Tests that the userAgent variable is not initialised when no value is passed in the constructor
         RobotsParser robotsParser = new RobotsParser();
+        assertNull(robotsParser.getUserAgent());
 
-        robotsParser.connect("http://jamesfrost.me/about.htm");
-        assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
-
-        robotsParser.connect(new URL("http://jamesfrost.me/about.htm"));
-        assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
-
-        robotsParser.connect("http://jamesfrost.me");
-        assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
-
-        robotsParser.connect(new URL("http://jamesfrost.me"));
-        assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
-
-        robotsParser.connect("http://jamesfrost.me/");
-        assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
-
-        robotsParser.connect(new URL("http://jamesfrost.me/"));
-        assertEquals("http://jamesfrost.me/", robotsParser.getDomain());
+        robotsParser = new RobotsParser("shitbot");
+        assertEquals(robotsParser.getUserAgent(), "shitbot");
     }
 }

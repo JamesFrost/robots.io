@@ -87,6 +87,8 @@ public class RobotsParser {
      * For example: when passed "http://jamesfrost.me" it will construct "http://jamesfrost.me/robots.txt."
      * It can also handle URL's with a path.
      * <p/>
+     * Also extracts the domain from the URL.
+     * <p/>
      *
      * @param url Website to construct the robots.txt URL for
      * @return Robots.txt URL for the website passed
@@ -137,11 +139,12 @@ public class RobotsParser {
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
             if (userAgent != null)
-                disallowedPaths = new RobotsTxtReader().read(in, userAgent);
+                disallowedPaths = RobotsTxtReader.read(in, userAgent);
             else
-                disallowedPaths = new RobotsTxtReader().read(in);
+                disallowedPaths = RobotsTxtReader.read(in);
 
         } catch (IOException e) { //Page 404 - robots.txt not found/doesn't exist
+            System.err.println("Robots.txt file not found for " + domain);
             disallowedPaths.clear();
         } catch (RobotsDisallowedException e) {
             disallowedPaths.clear();
