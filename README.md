@@ -3,7 +3,8 @@
 Robots.io is a Java library designed to make parsing a websites 'robots.txt' file easy.
 
 ## How to use
-The <a href = "https://github.com/JamesFrost/robots.io/blob/master/src/me/jamesfrost/robotsio/RobotsParser.java">RobotsParser</a> class provides all the functionality to use robots.io.
+<p>The <a href = "https://github.com/JamesFrost/robots.io/blob/master/src/me/jamesfrost/robotsio/RobotsParser.java">RobotsParser</a> class provides all the functionality to use robots.io.</p>
+<a href="http://robotsio.sourceforge.net/">The Javadoc for Robots.io can be found here.</a>
 
 ## Examples
 
