@@ -33,6 +33,8 @@ public class RobotsParserTest {
         disallowedPaths.add("cgi-bin/");
         disallowedPaths.add("404.htm");
         disallowedPaths.add("CV.htm");
+        disallowedPaths.add("simpleDo/");
+        disallowedPaths.add("basic-projects-template.htm");
     }
 
     /**
@@ -78,6 +80,38 @@ public class RobotsParserTest {
         } catch (RobotsDisallowedException e) {
             assertTrue(robotsParser.getDisallowedPaths().isEmpty());
         }
+    }
+
+    /**
+     * Method: filter(ArrayList<URL> unfilteredList)
+     */
+    @Test
+    public void testFilter() throws Exception {
+        RobotsParser robotsParser = new RobotsParser();
+
+        ArrayList<URL> input = new ArrayList<URL>();
+        input.add(new URL("http://jamesfrost.me/404.htm"));
+
+        ArrayList<URL> expectedOutput = new ArrayList<URL>();
+
+        robotsParser.connect("http://jamesfrost.me/");
+        assertEquals(expectedOutput, robotsParser.filter(input));
+    }
+
+    /**
+     * Method: filterString(ArrayList<String> unfilteredList)
+     */
+    @Test
+    public void testFilterString() throws Exception {
+        RobotsParser robotsParser = new RobotsParser();
+
+        ArrayList<String> input = new ArrayList<String>();
+        input.add("http://jamesfrost.me/404.htm");
+
+        ArrayList<String> expectedOutput = new ArrayList<String>();
+
+        robotsParser.connect("http://jamesfrost.me/");
+        assertEquals(expectedOutput, robotsParser.filterString(input));
     }
 
     /**

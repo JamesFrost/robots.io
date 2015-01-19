@@ -82,6 +82,44 @@ public class RobotsParser {
     }
 
     /**
+     * Filters a list of URL objects.
+     * <p/>
+     * Removes any disallowed URLs from the list.
+     *
+     * @param unfilteredList List to filter
+     * @return Filtered list
+     */
+    public ArrayList<URL> filter(ArrayList<URL> unfilteredList) {
+        ArrayList<URL> filteredList = new ArrayList<URL>();
+        for (URL url : unfilteredList) {
+            if (isAllowed(url))
+                filteredList.add(url);
+        }
+        return filteredList;
+    }
+
+    /**
+     * Filters a list of String URLs.
+     * <p/>
+     * Removes any disallowed URLs from the list. If a URL is malformed it is ignored.
+     *
+     * @param unfilteredList List to filter
+     * @return Filtered list
+     */
+    public ArrayList<String> filterString(ArrayList<String> unfilteredList) {
+        ArrayList<String> filteredList = new ArrayList<String>();
+        for (String url : unfilteredList) {
+            try {
+                if (isAllowed(url))
+                    filteredList.add(url);
+            } catch (MalformedURLException ignored) {
+
+            }
+        }
+        return filteredList;
+    }
+
+    /**
      * Constructs a URL to the expected location of a websites robots.txt.
      * <p/>
      * For example: when passed "http://jamesfrost.me" it will construct "http://jamesfrost.me/robots.txt."
