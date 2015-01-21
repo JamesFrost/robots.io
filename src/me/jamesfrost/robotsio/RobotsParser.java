@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * <p/>
  * Created by James Frost on 22/12/2014.
  *
- * @version v1.0.1
+ * @version v1.0.2
  */
 public class RobotsParser {
 
@@ -89,7 +89,7 @@ public class RobotsParser {
      * @param unfilteredList List to filter
      * @return Filtered list
      */
-    public ArrayList<URL> filter(ArrayList<URL> unfilteredList) {
+    public ArrayList<URL> filterURLs(ArrayList<URL> unfilteredList) {
         ArrayList<URL> filteredList = new ArrayList<URL>();
         for (URL url : unfilteredList) {
             if (isAllowed(url))
@@ -106,7 +106,7 @@ public class RobotsParser {
      * @param unfilteredList List to filter
      * @return Filtered list
      */
-    public ArrayList<String> filterString(ArrayList<String> unfilteredList) {
+    public ArrayList<String> filterStrings(ArrayList<String> unfilteredList) {
         ArrayList<String> filteredList = new ArrayList<String>();
         for (String url : unfilteredList) {
             try {
@@ -217,6 +217,23 @@ public class RobotsParser {
      */
     public ArrayList<String> getDisallowedPaths() {
         return disallowedPaths;
+    }
+
+    /**
+     * Gets the disallowed Urls.
+     * <p/>
+     * This will append the disallowed paths onto the cached domain, effectively turning them into absolute URLs.
+     * <p/>
+     * Please note, the URLs returned may not be valid; this is because some of the rules may be directories.
+     *
+     * @return Absolute URLs of the currently cached disallowed paths
+     */
+    public ArrayList<String> getDisallowedUrls() {
+        ArrayList<String> tmp = new ArrayList<String>();
+        for(String path : disallowedPaths) {
+            tmp.add(domain + path);
+        }
+        return tmp;
     }
 
     /**

@@ -83,7 +83,7 @@ public class RobotsParserTest {
     }
 
     /**
-     * Method: filter(ArrayList<URL> unfilteredList)
+     * Method: filterURLs(ArrayList<URL> unfilteredList)
      */
     @Test
     public void testFilter() throws Exception {
@@ -95,11 +95,11 @@ public class RobotsParserTest {
         ArrayList<URL> expectedOutput = new ArrayList<URL>();
 
         robotsParser.connect("http://jamesfrost.me/");
-        assertEquals(expectedOutput, robotsParser.filter(input));
+        assertEquals(expectedOutput, robotsParser.filterURLs(input));
     }
 
     /**
-     * Method: filterString(ArrayList<String> unfilteredList)
+     * Method: filterStrings(ArrayList<String> unfilteredList)
      */
     @Test
     public void testFilterString() throws Exception {
@@ -111,7 +111,23 @@ public class RobotsParserTest {
         ArrayList<String> expectedOutput = new ArrayList<String>();
 
         robotsParser.connect("http://jamesfrost.me/");
-        assertEquals(expectedOutput, robotsParser.filterString(input));
+        assertEquals(expectedOutput, robotsParser.filterStrings(input));
+    }
+
+    /**
+     * Method:  getDisallowedUrls()
+     */
+    @Test
+    public void testGetDisallowedURLs() throws Exception {
+        RobotsParser robotsParser = new RobotsParser();
+        robotsParser.connect("http://jamesfrost.me");
+
+        ArrayList<String> expectedOutput = new ArrayList<String>();
+        for (String path : disallowedPaths) {
+            expectedOutput.add("http://jamesfrost.me/" + path);
+        }
+
+        assertEquals(expectedOutput, robotsParser.getDisallowedUrls());
     }
 
     /**
