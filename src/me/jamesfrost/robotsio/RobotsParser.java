@@ -186,6 +186,7 @@ public class RobotsParser {
             disallowedPaths.clear();
         } catch (RobotsDisallowedException e) {
             disallowedPaths.clear();
+            disallowedPaths.add("");
             throw new RobotsDisallowedException(domain);
         }
     }

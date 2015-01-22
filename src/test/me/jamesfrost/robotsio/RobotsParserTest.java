@@ -12,16 +12,16 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 /**
- * RobotsParser Tester.
- * <p/>
- * Currently, this is testing against the robots.txt file hosted at jamesfrost.me.
- * This could be improved by creating mock classes.
- * <p/>
- *
- * @author <James Frost>
- * @version 1.0
- * @since <pre>Dec 24, 2014</pre>
- */
+* RobotsParser Tester.
+* <p/>
+* Currently, this is testing against the robots.txt file hosted at jamesfrost.me.
+* This could be improved by creating mock classes.
+* <p/>
+*
+* @author <James Frost>
+* @version 1.0
+* @since <pre>Dec 24, 2014</pre>
+*/
 public class RobotsParserTest {
 
     //Disallowed paths on jamesfrost.me
@@ -78,7 +78,7 @@ public class RobotsParserTest {
             robotsParser.connect("http://jamesfrost.me");
             fail();
         } catch (RobotsDisallowedException e) {
-            assertTrue(robotsParser.getDisallowedPaths().isEmpty());
+            assertFalse(robotsParser.isAllowed("http://jamesfrost.me"));
         }
     }
 
